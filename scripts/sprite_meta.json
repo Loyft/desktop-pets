@@ -1,0 +1,23 @@
+{
+  "source": "assets/fox-sprite-sheet.png",
+  "idle_source": "idle section of fox-sprite-sheet.jpg",
+  "series": [
+    "climb_l",
+    "climb_ld",
+    "climb_r",
+    "climb_rd",
+    "hang_l",
+    "hang_r",
+    "idle_l",
+    "idle_r",
+    "react_l",
+    "react_r",
+    "run_l",
+    "run_r",
+    "walk_l",
+    "walk_r"
+  ],
+  "feet_on_bottom": true,
+  "idle_l00_opaque": 893,
+  "idle_vs_walk": 1042
+}

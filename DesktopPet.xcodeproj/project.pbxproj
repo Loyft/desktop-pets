@@ -1,0 +1,304 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* main.swift */; };
+		A10000000000000000000002 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* AppDelegate.swift */; };
+		A10000000000000000000003 /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* MenuBarController.swift */; };
+		A10000000000000000000004 /* PetPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000004 /* PetPanel.swift */; };
+		A10000000000000000000005 /* ScreenEdgeGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* ScreenEdgeGeometry.swift */; };
+		A10000000000000000000006 /* PetScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000006 /* PetScene.swift */; };
+		A10000000000000000000007 /* EdgePathController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000007 /* EdgePathController.swift */; };
+		A10000000000000000000008 /* SpriteAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* SpriteAnimator.swift */; };
+		A10000000000000000000009 /* PetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* PetState.swift */; };
+		A1000000000000000000000A /* PetNeeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000A /* PetNeeds.swift */; };
+		A1000000000000000000000B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000B /* Assets.xcassets */; };
+		A1000000000000000000000E /* SpeechBubblePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* SpeechBubblePanel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A20000000000000000000001 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		A20000000000000000000002 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A20000000000000000000003 /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
+		A20000000000000000000004 /* PetPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetPanel.swift; sourceTree = "<group>"; };
+		A20000000000000000000005 /* ScreenEdgeGeometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenEdgeGeometry.swift; sourceTree = "<group>"; };
+		A20000000000000000000006 /* PetScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetScene.swift; sourceTree = "<group>"; };
+		A20000000000000000000007 /* EdgePathController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgePathController.swift; sourceTree = "<group>"; };
+		A20000000000000000000008 /* SpriteAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpriteAnimator.swift; sourceTree = "<group>"; };
+		A20000000000000000000009 /* PetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetState.swift; sourceTree = "<group>"; };
+		A2000000000000000000000A /* PetNeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetNeeds.swift; sourceTree = "<group>"; };
+		A2000000000000000000000B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A2000000000000000000000E /* SpeechBubblePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubblePanel.swift; sourceTree = "<group>"; };
+		A2000000000000000000000C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A2000000000000000000000D /* DesktopPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DesktopPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A30000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A40000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000002 /* DesktopPet */,
+				A40000000000000000000006 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A40000000000000000000002 /* DesktopPet */ = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000003 /* App */,
+				A40000000000000000000004 /* Overlay */,
+				A40000000000000000000005 /* Pet */,
+				A40000000000000000000007 /* Resources */,
+			);
+			path = DesktopPet;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000003 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000001 /* main.swift */,
+				A20000000000000000000002 /* AppDelegate.swift */,
+				A20000000000000000000003 /* MenuBarController.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000004 /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000004 /* PetPanel.swift */,
+				A20000000000000000000005 /* ScreenEdgeGeometry.swift */,
+				A2000000000000000000000E /* SpeechBubblePanel.swift */,
+			);
+			path = Overlay;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000005 /* Pet */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000006 /* PetScene.swift */,
+				A20000000000000000000007 /* EdgePathController.swift */,
+				A20000000000000000000008 /* SpriteAnimator.swift */,
+				A20000000000000000000009 /* PetState.swift */,
+				A2000000000000000000000A /* PetNeeds.swift */,
+			);
+			path = Pet;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000006 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000000D /* DesktopPet.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000007 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000000000000B /* Assets.xcassets */,
+				A2000000000000000000000C /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A50000000000000000000001 /* DesktopPet */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A70000000000000000000003 /* Build configuration list for PBXNativeTarget "DesktopPet" */;
+			buildPhases = (
+				A60000000000000000000001 /* Sources */,
+				A30000000000000000000001 /* Frameworks */,
+				A60000000000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DesktopPet;
+			productName = DesktopPet;
+			productReference = A2000000000000000000000D /* DesktopPet.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A80000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					A50000000000000000000001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
+				};
+			};
+			buildConfigurationList = A70000000000000000000001 /* Build configuration list for PBXProject "DesktopPet" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A40000000000000000000001;
+			productRefGroup = A40000000000000000000006 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A50000000000000000000001 /* DesktopPet */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A60000000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A1000000000000000000000B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A60000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000001 /* main.swift in Sources */,
+				A10000000000000000000002 /* AppDelegate.swift in Sources */,
+				A10000000000000000000003 /* MenuBarController.swift in Sources */,
+				A10000000000000000000004 /* PetPanel.swift in Sources */,
+				A10000000000000000000005 /* ScreenEdgeGeometry.swift in Sources */,
+				A10000000000000000000006 /* PetScene.swift in Sources */,
+				A10000000000000000000007 /* EdgePathController.swift in Sources */,
+				A10000000000000000000008 /* SpriteAnimator.swift in Sources */,
+				A10000000000000000000009 /* PetState.swift in Sources */,
+				A1000000000000000000000A /* PetNeeds.swift in Sources */,
+				A1000000000000000000000E /* SpeechBubblePanel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A90000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A90000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		A90000000000000000000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DesktopPet/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.desktoppets.DesktopPet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A90000000000000000000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DesktopPet/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.desktoppets.DesktopPet;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A70000000000000000000001 /* Build configuration list for PBXProject "DesktopPet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A90000000000000000000001 /* Debug */,
+				A90000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A70000000000000000000003 /* Build configuration list for PBXNativeTarget "DesktopPet" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A90000000000000000000003 /* Debug */,
+				A90000000000000000000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A80000000000000000000001 /* Project object */;
+}
