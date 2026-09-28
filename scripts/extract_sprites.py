@@ -12,6 +12,9 @@ Each block has rows: Front, Back, Left, Right.
 Outputs separate left/right series (no runtime mirroring):
   walk_l_*, walk_r_*, run_l_*, run_r_*, idle_l_*, idle_r_*, react_l_*, react_r_*
   climb_* / hang_* (rotated side walk)
+
+Idle / walk / run frames come from assets/fox/f-*-*.png (left-facing);
+right is mirrored. Climb/hang are rotated from walk.
 """
 
 from __future__ import annotations
@@ -28,6 +31,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "assets" / "fox-sprite-sheet.png"
 if not SRC.exists():
     SRC = ROOT / "assets" / "fox-sprite-sheet.jpg"
+FOX_DIR = ROOT / "assets" / "fox"
 ATLAS = ROOT / "DesktopPet" / "Resources" / "Assets.xcassets" / "Pet.spriteatlas"
 META = ROOT / "scripts" / "sprite_meta.json"
 
@@ -292,30 +296,37 @@ def clean_cell(img: Image.Image) -> Image.Image:
     return to_brownish(scrub_bright_rim(largest_blob(keyed)))
 
 
-def idle_stand_score(img: Image.Image) -> float:
-    """Lower is better: prefer compact planted stances over stride frames."""
-    bb = img.getbbox()
-    if not bb:
-        return 1e9
-    sp = img.crop(bb)
-    px = sp.load()
-    w, h = sp.size
-    y0 = int(h * 0.62)
-    xs: list[int] = []
-    for y in range(y0, h):
-        for x in range(w):
-            if px[x, y][3] > 40:
-                xs.append(x)
-    spread = (max(xs) - min(xs)) if xs else 99
-    return spread + w * 0.15
+def prepare_dedicated_frame(img: Image.Image) -> Image.Image:
+    """Clean a dedicated fox PNG (already transparent) and shrink to canvas size."""
+    sp = to_brownish(scrub_bright_rim(largest_blob(harden_alpha(strip_shadow(img.convert("RGBA"))))))
+    bbox = sp.getbbox()
+    if not bbox:
+        return Image.new("RGBA", (CANVAS, CANVAS), (0, 0, 0, 0))
+    sp = sp.crop(bbox)
+    max_w, max_h = CANVAS - 2, CANVAS - 2
+    if sp.width > max_w or sp.height > max_h:
+        fit = min(max_w / sp.width, max_h / sp.height)
+        sp = sp.resize(
+            (max(1, int(sp.width * fit)), max(1, int(sp.height * fit))),
+            Image.Resampling.BOX,
+        )
+        sp = harden_alpha(sp)
+        bbox = sp.getbbox()
+        if bbox:
+            sp = sp.crop(bbox)
+    return sp
 
 
-def pick_idle_frames(frames: list[Image.Image], keep: int = 4) -> list[Image.Image]:
-    """Keep the most planted IDLE frames (not stride-y side poses)."""
-    ranked = sorted(enumerate(frames), key=lambda t: idle_stand_score(t[1]))
-    # Preserve chronological order among the keepers for a gentle cycle.
-    chosen = sorted(ranked[:keep], key=lambda t: t[0])
-    return [fr for _, fr in chosen]
+def load_dedicated_frames(glob_pat: str) -> list[Image.Image]:
+    """Left-facing frames from assets/fox matching glob_pat (e.g. f-walk-*.png)."""
+    paths = sorted(FOX_DIR.glob(glob_pat))
+    if not paths:
+        raise SystemExit(f"Missing frames {FOX_DIR}/{glob_pat}")
+    return [prepare_dedicated_frame(Image.open(p)) for p in paths]
+
+
+def mirror_right(frames: list[Image.Image]) -> list[Image.Image]:
+    return [fr.transpose(Image.Transpose.FLIP_LEFT_RIGHT) for fr in frames]
 
 
 def pad(sprite: Image.Image, anchor: str = "feet", lift: int = 0) -> Image.Image:
@@ -464,16 +475,16 @@ def main() -> None:
 
     sheet = Image.open(SRC).convert("RGBA")
 
-    # RUN sheet has Left/Right rows swapped vs the other blocks.
-    walk_l = series(sheet, "walk", ROW_LEFT)
-    walk_r = series(sheet, "walk", ROW_RIGHT)
-    run_l = series(sheet, "run", ROW_RIGHT)
-    run_r = series(sheet, "run", ROW_LEFT)
+    # Dedicated walk / run / idle art (left-facing); mirror for right.
+    # Climb/hang are derived from these walk frames.
+    walk_l = load_dedicated_frames("f-walk-*.png")
+    walk_r = mirror_right(walk_l)
+    run_l = load_dedicated_frames("f-run-*.png")
+    run_r = mirror_right(run_l)
+    idle_l = load_dedicated_frames("f-idle-*.png")
+    idle_r = mirror_right(idle_l)
 
-    # IDLE from the same original sheet (Left/Right rows) — matches walk/run size & color.
-    idle_l = series(sheet, "idle", ROW_LEFT)
-    idle_r = series(sheet, "idle", ROW_RIGHT)
-
+    # HURT / react still come from the sheet.
     hurt_l = series(sheet, "hurt", ROW_LEFT)
     hurt_r = series(sheet, "hurt", ROW_RIGHT)
 
@@ -481,18 +492,20 @@ def main() -> None:
         f"walk_l/r={len(walk_l)}/{len(walk_r)} run={len(run_l)}/{len(run_r)} "
         f"idle_l/r={len(idle_l)}/{len(idle_r)} hurt={len(hurt_l)}/{len(hurt_r)}"
     )
-    for i, fr in enumerate(idle_l):
+    for i, fr in enumerate(run_l):
         bb = fr.getbbox()
-        print(f"  idle_l[{i}] opaque={sum(1 for p in fr.getdata() if p[3]>40)} bbox={bb}")
+        print(f"  run_l[{i}] opaque={sum(1 for p in fr.getdata() if p[3]>40)} bbox={bb}")
 
-    save_series(walk_l, "walk_l")
-    save_series(walk_r, "walk_r")
-    save_series(run_l, "run_l")
-    save_series(run_r, "run_r")
+    for i, fr in enumerate(walk_l):
+        save(pad(fr, "feet"), f"walk_l_{i:02d}")
+        save(pad(walk_r[i], "feet"), f"walk_r_{i:02d}")
+    for i, fr in enumerate(run_l):
+        save(pad(fr, "feet"), f"run_l_{i:02d}")
+        save(pad(run_r[i], "feet"), f"run_r_{i:02d}")
 
-    for i in range(8):
-        save(pad(idle_l[i % len(idle_l)], "feet"), f"idle_l_{i:02d}")
-        save(pad(idle_r[i % len(idle_r)], "feet"), f"idle_r_{i:02d}")
+    for i, fr in enumerate(idle_l):
+        save(pad(fr, "feet"), f"idle_l_{i:02d}")
+        save(pad(idle_r[i], "feet"), f"idle_r_{i:02d}")
 
     for i in range(8):
         save(pad(hurt_l[i % len(hurt_l)], "feet"), f"react_l_{i:02d}")
@@ -526,7 +539,9 @@ def main() -> None:
     )
     meta = {
         "source": str(SRC.relative_to(ROOT)),
-        "idle_source": "idle section of fox-sprite-sheet.jpg",
+        "walk_source": "assets/fox/f-walk-*.png (right mirrored)",
+        "run_source": "assets/fox/f-run-*.png (right mirrored)",
+        "idle_source": "assets/fox/f-idle-*.png (right mirrored)",
         "series": sorted({p.name.rsplit("_", 1)[0] for p in ATLAS.glob("*.imageset")}),
         "feet_on_bottom": feet_ok,
         "idle_l00_opaque": sum(1 for p in idle0.getdata() if p[3] > 40),
