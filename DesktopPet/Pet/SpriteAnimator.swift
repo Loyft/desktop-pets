@@ -54,8 +54,8 @@ final class SpriteAnimator {
             true: loadSeries(prefix: "run_r", count: 6),
         ]
         textures[.idle] = [
-            false: loadSeries(prefix: "idle_l", count: 8),
-            true: loadSeries(prefix: "idle_r", count: 8),
+            false: loadSeries(prefix: "idle_l", count: 4),
+            true: loadSeries(prefix: "idle_r", count: 4),
         ]
         textures[.react] = [
             false: loadSeries(prefix: "react_l", count: 8),
