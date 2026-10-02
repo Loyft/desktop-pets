@@ -265,8 +265,34 @@ def scrub_bright_rim(img: Image.Image) -> Image.Image:
     return out
 
 
+def soften_fox_fur(r: int, g: int, b: int, amount: float = 0.5) -> tuple[int, int, int]:
+    """Mute saturated red-orange toward tawny; `amount` is blend toward full soften (0–1)."""
+    mid = 120.0
+    contrast = 0.82
+    sat = 0.68
+    r2 = mid + (r - mid) * contrast
+    g2 = mid + (g - mid) * contrast
+    b2 = mid + (b - mid) * contrast
+    avg = (r2 + g2 + b2) / 3.0
+    r3 = avg + (r2 - avg) * sat
+    g3 = avg + (g2 - avg) * sat
+    b3 = avg + (b2 - avg) * sat
+    fr = r3 * 0.94 + 4
+    fg = g3 * 0.88 + r3 * 0.14 + 10
+    fb = b3 * 0.92 + g3 * 0.06 + 6
+    t = max(0.0, min(1.0, amount))
+    nr = r + (fr - r) * t
+    ng = g + (fg - g) * t
+    nb = b + (fb - b) * t
+    return (
+        max(0, min(255, int(round(nr)))),
+        max(0, min(255, int(round(ng)))),
+        max(0, min(255, int(round(nb)))),
+    )
+
+
 def to_brownish(img: Image.Image) -> Image.Image:
-    """Shift fox orange/red toward a warmer brown."""
+    """Tone down fox orange/red saturation and contrast toward real-fox tawny."""
     out = img.copy()
     px = out.load()
     for y in range(out.height):
@@ -278,16 +304,10 @@ def to_brownish(img: Image.Image) -> Image.Image:
                 continue
             if max(r, g, b) <= 70:
                 continue
-            if r >= 110 and r >= g and r > b + 15:
-                nr = int(r * 0.82 + g * 0.10 + 18)
-                ng = int(g * 0.92 + r * 0.06 + 14)
-                nb = int(b * 0.85 + 10)
-                px[x, y] = (
-                    max(0, min(255, nr)),
-                    max(0, min(255, ng)),
-                    max(0, min(255, nb)),
-                    a,
-                )
+            # Warm body + dark red shadows (skip cool greys / black paws).
+            if r >= g and r > b + 8 and (r >= 85 or r - b >= 20):
+                nr, ng, nb = soften_fox_fur(r, g, b)
+                px[x, y] = (nr, ng, nb, a)
     return out
 
 
