@@ -7,6 +7,8 @@ final class PetPanel: NSPanel {
     private let skView: SKView
     private let scene: PetScene
     private let speechBubble = SpeechBubblePanel()
+    private let hearts = HeartEmitter()
+    private let overlayEffects = OverlayEffectCoordinator()
     private var pathController: EdgePathController!
     private var displayLink: CVDisplayLink?
     private var lastTimestamp: CFTimeInterval = 0
@@ -92,6 +94,23 @@ final class PetPanel: NSPanel {
         pathController = EdgePathController(geometry: geometry)
         setFrameOrigin(pathController.origin)
 
+        overlayEffects.onPreempt = { [weak self] effect in
+            guard let self else { return }
+            switch effect {
+            case .hearts:
+                self.hearts.clearSilently()
+            case .speech:
+                self.speechBubble.hideBubble()
+            }
+        }
+
+        speechBubble.onDidHide = { [weak self] in
+            self?.overlayEffects.end(.speech)
+        }
+        hearts.onDidBecomeIdle = { [weak self] in
+            self?.overlayEffects.end(.hearts)
+        }
+
         pathController.onFrame = { [weak self] origin, motion in
             guard let self else { return }
             self.setFrameOrigin(origin)
@@ -100,14 +119,27 @@ final class PetPanel: NSPanel {
 
         pathController.onSpeech = { [weak self] phrase in
             guard let self, !self.isHiddenPet else { return }
-            self.speechBubble.show(text: phrase, above: self.frame)
+            self.overlayEffects.present(.speech) { [weak self] in
+                guard let self else { return }
+                self.speechBubble.show(text: phrase, above: self.frame)
+            }
+        }
+
+        pathController.onHearts = { [weak self] in
+            guard let self, !self.isHiddenPet else { return }
+            self.overlayEffects.present(.hearts) { [weak self] in
+                guard let self else { return }
+                self.hearts.spawn(near: self.frame)
+            }
         }
     }
 
     func setPetHidden(_ hidden: Bool) {
         isHiddenPet = hidden
         if hidden {
+            overlayEffects.clear()
             speechBubble.hideBubble()
+            hearts.clearSilently()
             orderOut(nil)
             pathController.setPaused(true)
         } else {
@@ -177,8 +209,10 @@ final class PetPanel: NSPanel {
         if speechBubble.isVisible {
             speechBubble.setFrameOrigin(NSPoint(
                 x: frame.midX - speechBubble.frame.width / 2,
-                y: frame.minY + frame.height * 0.56
+                y: SpeechBubblePanel.originY(above: frame)
             ))
         }
+
+        hearts.tick(deltaTime: clamped)
     }
 }

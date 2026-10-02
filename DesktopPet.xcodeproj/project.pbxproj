@@ -19,6 +19,8 @@
 		A1000000000000000000000A /* PetNeeds.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000A /* PetNeeds.swift */; };
 		A1000000000000000000000B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000B /* Assets.xcassets */; };
 		A1000000000000000000000E /* SpeechBubblePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* SpeechBubblePanel.swift */; };
+		A1000000000000000000000F /* HeartEmitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000F /* HeartEmitter.swift */; };
+		A10000000000000000000010 /* OverlayEffectCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* OverlayEffectCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		A2000000000000000000000A /* PetNeeds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetNeeds.swift; sourceTree = "<group>"; };
 		A2000000000000000000000B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A2000000000000000000000E /* SpeechBubblePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubblePanel.swift; sourceTree = "<group>"; };
+		A2000000000000000000000F /* HeartEmitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartEmitter.swift; sourceTree = "<group>"; };
+		A20000000000000000000010 /* OverlayEffectCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayEffectCoordinator.swift; sourceTree = "<group>"; };
 		A2000000000000000000000C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A2000000000000000000000D /* DesktopPet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DesktopPet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -84,6 +88,8 @@
 				A20000000000000000000004 /* PetPanel.swift */,
 				A20000000000000000000005 /* ScreenEdgeGeometry.swift */,
 				A2000000000000000000000E /* SpeechBubblePanel.swift */,
+				A2000000000000000000000F /* HeartEmitter.swift */,
+				A20000000000000000000010 /* OverlayEffectCoordinator.swift */,
 			);
 			path = Overlay;
 			sourceTree = "<group>";
@@ -197,6 +203,8 @@
 				A10000000000000000000009 /* PetState.swift in Sources */,
 				A1000000000000000000000A /* PetNeeds.swift in Sources */,
 				A1000000000000000000000E /* SpeechBubblePanel.swift in Sources */,
+				A1000000000000000000000F /* HeartEmitter.swift in Sources */,
+				A10000000000000000000010 /* OverlayEffectCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

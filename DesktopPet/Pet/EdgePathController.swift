@@ -11,10 +11,12 @@ final class EdgePathController {
     private var idleRemaining: TimeInterval = 0
     private var reactRemaining: TimeInterval = 0
     private var speechCooldown: TimeInterval = TimeInterval.random(in: 8...16)
+    private var heartCooldown: TimeInterval = TimeInterval.random(in: 10...22)
     private var currentGait: PetGait = .walk
 
     var onFrame: ((CGPoint, PetMotionState) -> Void)?
     var onSpeech: ((String) -> Void)?
+    var onHearts: (() -> Void)?
 
     private static let phrases = [
         "yip", "yap", "arf", "...", "huff", "mrrp", "sniff", "wow",
@@ -42,6 +44,10 @@ final class EdgePathController {
         reactRemaining = 1.1
         onSpeech?(Self.phrases.randomElement() ?? "yip")
         speechCooldown = TimeInterval.random(in: 6...14)
+        if Double.random(in: 0...1) < 0.55 {
+            onHearts?()
+            heartCooldown = TimeInterval.random(in: 8...18)
+        }
         onFrame?(origin, motion)
     }
 
@@ -52,6 +58,7 @@ final class EdgePathController {
         }
 
         maybeSpeak(deltaTime: deltaTime)
+        maybeHearts(deltaTime: deltaTime)
 
         if motion.posture == .react {
             reactRemaining -= deltaTime
@@ -282,5 +289,15 @@ final class EdgePathController {
             onSpeech?(Self.phrases.randomElement() ?? "yip")
         }
         speechCooldown = TimeInterval.random(in: 7...16)
+    }
+
+    private func maybeHearts(deltaTime: TimeInterval) {
+        heartCooldown -= deltaTime
+        if heartCooldown > 0 { return }
+        guard motion.posture != .react else { return }
+        if Double.random(in: 0...1) < 0.45 {
+            onHearts?()
+        }
+        heartCooldown = TimeInterval.random(in: 12...28)
     }
 }
