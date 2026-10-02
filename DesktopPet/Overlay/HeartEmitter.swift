@@ -32,25 +32,46 @@ final class HeartEmitter {
 
     func spawn(near petFrame: NSRect, count: Int? = nil) {
         let n = count ?? Int.random(in: 1...3)
+        let origin = CGPoint(
+            x: petFrame.midX - size / 2,
+            y: petFrame.minY + petFrame.height * 0.55
+        )
         for _ in 0..<n {
-            let panel = makeHeartPanel()
-            let startX = petFrame.midX - size / 2 + CGFloat.random(in: -18...18)
-            let startY = petFrame.minY + petFrame.height * 0.55 + CGFloat.random(in: -4...10)
-            panel.setFrame(
-                NSRect(x: startX, y: startY, width: size, height: size),
-                display: true
+            addHeart(
+                at: origin,
+                spread: 18,
+                vx: CGFloat.random(in: -12...12),
+                vy: CGFloat.random(in: 22...38),
+                life: TimeInterval.random(in: 1.6...2.4)
             )
-            panel.alphaValue = 0.95
-            panel.orderFrontRegardless()
-            particles.append(
-                Particle(
-                    panel: panel,
-                    x: startX,
-                    y: startY,
-                    vx: CGFloat.random(in: -12...12),
-                    vy: CGFloat.random(in: 22...38),
-                    life: TimeInterval.random(in: 1.6...2.4)
-                )
+        }
+        wasActive = true
+    }
+
+    /// Click burst: hearts launch from the fox toward the cursor, then drift and fade.
+    func spawnBurst(near petFrame: NSRect) {
+        let n = Int.random(in: 3...5)
+        let origin = CGPoint(
+            x: petFrame.midX,
+            y: petFrame.minY + petFrame.height * 0.58
+        )
+        let cursor = NSEvent.mouseLocation
+        var dx = cursor.x - origin.x
+        var dy = cursor.y - origin.y
+        let len = max(40, hypot(dx, dy))
+        dx /= len
+        dy /= len
+        let baseAngle = atan2(dy, dx)
+
+        for _ in 0..<n {
+            let angle = baseAngle + CGFloat.random(in: -0.55...0.55)
+            let speed = CGFloat.random(in: 90...150)
+            addHeart(
+                at: CGPoint(x: origin.x - size / 2, y: origin.y - size / 2),
+                spread: 10,
+                vx: cos(angle) * speed,
+                vy: sin(angle) * speed,
+                life: TimeInterval.random(in: 1.8...2.8)
             )
         }
         wasActive = true
@@ -66,10 +87,15 @@ final class HeartEmitter {
                 p.panel.orderOut(nil)
                 continue
             }
-            let t = p.age / p.life
             p.x += p.vx * deltaTime
             p.y += p.vy * deltaTime
-            p.vy *= 1.0 - 0.15 * deltaTime
+            // Soften speed so they float rather than rocket forever.
+            p.vx *= 1.0 - 0.55 * deltaTime
+            p.vy *= 1.0 - 0.35 * deltaTime
+            // Gentle upward bias as they slow.
+            p.vy += 18 * deltaTime
+
+            let t = p.age / p.life
             p.panel.setFrameOrigin(NSPoint(x: p.x, y: p.y))
             p.panel.alphaValue = CGFloat(1.0 - t * t)
             kept.append(p)
@@ -100,6 +126,27 @@ final class HeartEmitter {
         }
         particles.removeAll()
         wasActive = false
+    }
+
+    private func addHeart(
+        at origin: CGPoint,
+        spread: CGFloat,
+        vx: CGFloat,
+        vy: CGFloat,
+        life: TimeInterval
+    ) {
+        let panel = makeHeartPanel()
+        let startX = origin.x + CGFloat.random(in: -spread...spread)
+        let startY = origin.y + CGFloat.random(in: -spread * 0.4...spread * 0.4)
+        panel.setFrame(
+            NSRect(x: startX, y: startY, width: size, height: size),
+            display: true
+        )
+        panel.alphaValue = 0.95
+        panel.orderFrontRegardless()
+        particles.append(
+            Particle(panel: panel, x: startX, y: startY, vx: vx, vy: vy, life: life)
+        )
     }
 
     private func makeHeartPanel() -> NSPanel {

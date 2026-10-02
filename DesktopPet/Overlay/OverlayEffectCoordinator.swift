@@ -3,15 +3,21 @@ import Foundation
 /// Serializes floating chrome (speech, hearts, …) so they never overlap in time.
 final class OverlayEffectCoordinator {
     enum Effect: Hashable {
-        case speech
         case hearts
+        case speech
+        case heartBurst
 
         /// Higher wins when something must preempt.
         var priority: Int {
             switch self {
             case .hearts: return 0
             case .speech: return 1
+            case .heartBurst: return 2
             }
+        }
+
+        var isHearts: Bool {
+            self == .hearts || self == .heartBurst
         }
     }
 
@@ -54,6 +60,15 @@ final class OverlayEffectCoordinator {
         }
         active = nil
         drain()
+    }
+
+    /// Release whichever hearts effect is currently occupying the lane.
+    func endActiveHearts() {
+        guard let active, active.isHearts else {
+            queue.removeAll { $0.0.isHearts }
+            return
+        }
+        end(active)
     }
 
     func clear() {

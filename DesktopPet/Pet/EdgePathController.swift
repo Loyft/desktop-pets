@@ -38,15 +38,13 @@ final class EdgePathController {
         motion.isPaused = paused
     }
 
-    func triggerReact() {
+    func triggerReact(speak: Bool = true) {
         guard motion.posture != .react else { return }
         motion.posture = .react
         reactRemaining = 1.1
-        onSpeech?(Self.phrases.randomElement() ?? "yip")
-        speechCooldown = TimeInterval.random(in: 6...14)
-        if Double.random(in: 0...1) < 0.55 {
-            onHearts?()
-            heartCooldown = TimeInterval.random(in: 8...18)
+        if speak {
+            onSpeech?(Self.phrases.randomElement() ?? "yip")
+            speechCooldown = TimeInterval.random(in: 6...14)
         }
         onFrame?(origin, motion)
     }
