@@ -76,17 +76,27 @@ final class PetPanel: NSPanel {
         contentView = skView
     }
 
-    override var canBecomeKey: Bool { true }
-
-    override func mouseDown(with event: NSEvent) {
-        pathController.triggerReact()
-    }
+    override var canBecomeKey: Bool { false }
 
     private func configureScene() {
         scene.onPetClicked = { [weak self] in
-            self?.pathController.triggerReact()
+            self?.spawnClickHeartBurst()
         }
         skView.presentScene(scene)
+    }
+
+    private func spawnClickHeartBurst() {
+        guard !isHiddenPet else { return }
+        // Defer so this click doesn't stall the motion/animation tick.
+        overlayEffects.present(.heartBurst) { [weak self] in
+            DispatchQueue.main.async { [weak self] in
+                guard let self, !self.isHiddenPet else {
+                    self?.overlayEffects.end(.heartBurst)
+                    return
+                }
+                self.hearts.spawnBurst(near: self.frame)
+            }
+        }
     }
 
     private func configureMotion() {
@@ -97,7 +107,7 @@ final class PetPanel: NSPanel {
         overlayEffects.onPreempt = { [weak self] effect in
             guard let self else { return }
             switch effect {
-            case .hearts:
+            case .hearts, .heartBurst:
                 self.hearts.clearSilently()
             case .speech:
                 self.speechBubble.hideBubble()
@@ -108,7 +118,7 @@ final class PetPanel: NSPanel {
             self?.overlayEffects.end(.speech)
         }
         hearts.onDidBecomeIdle = { [weak self] in
-            self?.overlayEffects.end(.hearts)
+            self?.overlayEffects.endActiveHearts()
         }
 
         pathController.onFrame = { [weak self] origin, motion in
