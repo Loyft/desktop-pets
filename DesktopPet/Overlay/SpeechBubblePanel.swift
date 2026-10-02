@@ -4,6 +4,10 @@ import AppKit
 final class SpeechBubblePanel: NSPanel {
     private let label = NSTextField(labelWithString: "")
     private var hideWorkItem: DispatchWorkItem?
+    private var isShowing = false
+
+    /// Fired once when the bubble fully hides (timeout or forced).
+    var onDidHide: (() -> Void)?
 
     convenience init() {
         self.init(
@@ -54,20 +58,25 @@ final class SpeechBubblePanel: NSPanel {
         orderOut(nil)
     }
 
+    /// Shared with PetPanel follow-up so the bubble stays clear of the fox head.
+    static func originY(above petFrame: NSRect) -> CGFloat {
+        petFrame.minY + petFrame.height * 0.78
+    }
+
     func show(text: String, above petFrame: NSRect) {
         label.stringValue = text
         label.sizeToFit()
         let width = max(56, min(140, label.intrinsicContentSize.width + 24))
         let height: CGFloat = 34
         let x = petFrame.midX - width / 2
-        // Panel is taller than the fox art (feet-anchored); sit just above the sprite.
-        let y = petFrame.minY + petFrame.height * 0.56
+        let y = Self.originY(above: petFrame)
         setFrame(NSRect(x: x, y: y, width: width, height: height), display: true)
+        isShowing = true
         orderFrontRegardless()
 
         hideWorkItem?.cancel()
         let work = DispatchWorkItem { [weak self] in
-            self?.orderOut(nil)
+            self?.finishHide()
         }
         hideWorkItem = work
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.2, execute: work)
@@ -75,7 +84,14 @@ final class SpeechBubblePanel: NSPanel {
 
     func hideBubble() {
         hideWorkItem?.cancel()
+        finishHide()
+    }
+
+    private func finishHide() {
+        guard isShowing else { return }
+        isShowing = false
         orderOut(nil)
+        onDidHide?()
     }
 }
 
